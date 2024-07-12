@@ -7,9 +7,13 @@ from dotenv import load_dotenv
 from icecream import ic
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-
 load_dotenv()  # read local .env file
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = openai.AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+)
 
 MAX_TOKENS_PER_CHUNK = (
     1000  # if text is more than this many tokens, we'll break it up into
@@ -20,7 +24,8 @@ MAX_TOKENS_PER_CHUNK = (
 def get_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    model: str = "gpt-4-turbo",
+    # model: str = "gpt-4-turbo",
+    model: str = "gpt-35-turbo-16k",
     temperature: float = 0.3,
     json_mode: bool = False,
 ) -> Union[str, dict]:
@@ -664,7 +669,8 @@ def translate(
         ic(token_size)
 
         text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-            model_name="gpt-4",
+            # model_name="gpt-4",
+            model_name="gpt-35-turbo-16k",
             chunk_size=token_size,
             chunk_overlap=0,
         )
