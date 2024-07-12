@@ -84,6 +84,7 @@ def update_model(endpoint):
     endpoint_model_map = {
         "Groq": "llama3-70b-8192",
         "OpenAI": "gpt-4o",
+        "AOAI": "gpt-35-turbo-16k",
         "TogetherAI": "Qwen/Qwen2-72B-Instruct",
         "Ollama": "llama3",
         "CUSTOM": "",
@@ -237,7 +238,7 @@ with gr.Blocks(theme="soft", css=CSS, fill_height=True) as demo:
         with gr.Column(scale=1) as menubar:
             endpoint = gr.Dropdown(
                 label="Endpoint",
-                choices=["OpenAI", "Groq", "TogetherAI", "Ollama", "CUSTOM"],
+                choices=["OpenAI", "AOAI", "Groq", "TogetherAI", "Ollama", "CUSTOM"],
                 value="OpenAI",
             )
             choice = gr.Checkbox(
@@ -258,6 +259,7 @@ with gr.Blocks(theme="soft", css=CSS, fill_height=True) as demo:
                     label="Additional Endpoint",
                     choices=[
                         "OpenAI",
+                        "AOAI",
                         "Groq",
                         "TogetherAI",
                         "Ollama",

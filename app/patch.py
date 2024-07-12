@@ -37,6 +37,12 @@ def model_load(
     match endpoint:
         case "OpenAI":
             client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        case "AOAI":
+            client = openai.AzureOpenAI(
+                api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
+                api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+                azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
+            )
         case "Groq":
             client = openai.OpenAI(
                 api_key=api_key if api_key else os.getenv("GROQ_API_KEY"),
