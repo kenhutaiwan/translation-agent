@@ -18,13 +18,13 @@ from translation_agent.utils import one_chunk_translate_text
 load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+model = os.getenv("MODEL_NAME")
 
 
 def test_get_completion_json_mode_api_call():
     # Set up the test data
     prompt = "What is the capital of France in json?"
     system_message = "You are a helpful assistant."
-    model = "gpt-4-turbo"
     temperature = 0.3
     json_mode = True
 
@@ -44,7 +44,6 @@ def test_get_completion_non_json_mode_api_call():
     # Set up the test data
     prompt = "What is the capital of France?"
     system_message = "You are a helpful assistant."
-    model = "gpt-4-turbo"
     temperature = 0.3
     json_mode = False
 

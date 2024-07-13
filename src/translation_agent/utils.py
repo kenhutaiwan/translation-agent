@@ -14,6 +14,7 @@ client = openai.AzureOpenAI(
     api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
     azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT")
 )
+model = os.getenv("MODEL_NAME")
 
 MAX_TOKENS_PER_CHUNK = (
     1000  # if text is more than this many tokens, we'll break it up into
@@ -24,8 +25,7 @@ MAX_TOKENS_PER_CHUNK = (
 def get_completion(
     prompt: str,
     system_message: str = "You are a helpful assistant.",
-    # model: str = "gpt-4-turbo",
-    model: str = "gpt-35-turbo-16k",
+    model: str = model,
     temperature: float = 0.3,
     json_mode: bool = False,
 ) -> Union[str, dict]:
@@ -669,8 +669,7 @@ def translate(
         ic(token_size)
 
         text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-            # model_name="gpt-4",
-            model_name="gpt-35-turbo-16k",
+            model_name=model,
             chunk_size=token_size,
             chunk_overlap=0,
         )
@@ -682,3 +681,19 @@ def translate(
         )
 
         return "".join(translation_2_chunks)
+
+
+def main(token_count: int, token_limit: int) -> dict:
+    if token_count <= token_limit:
+        return token_count
+
+    num_chunks = (token_count + token_limit - 1) // token_limit
+    chunk_size = token_count // num_chunks
+
+    remaining_tokens = token_count % token_limit
+    if remaining_tokens > 0:
+        chunk_size += remaining_tokens // num_chunks
+
+    return {
+        "result": chunk_size,
+    }
